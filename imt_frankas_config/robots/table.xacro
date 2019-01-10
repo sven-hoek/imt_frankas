@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="table">
+  <xacro:macro name="table" params="connected_to:='' length:='2.45' width:='1.4' height:='0.8'">
+      <xacro:property name="len" value="${length}" />
+      <xacro:property name="wid" value="${width}" />
+      <xacro:property name="hei" value="${height}" />
+
+      <xacro:unless value="${not connected_to}">
+        <joint name="table_joint_${connected_to}" type="fixed">
+          <parent link="${connected_to}"/>
+          <child link="table"/>
+          <origin rpy="0 0 0" xyz="0 0 ${hei}"/>
+        </joint>
+      </xacro:unless>
+
+      <link name="table">
+        <visual>
+          <origin xyz="${len/2.0} ${wid/2.0} ${-hei/2.0}" rpy="0 0 0"/>
+          <geometry>
+            <box size="${len} ${wid} ${hei}"/>
+          </geometry>
+        </visual>
+        <collision>
+          <origin xyz="${len/2.0} ${wid/2.0} ${-hei/2.0}" rpy="0 0 0"/>
+          <geometry>
+              <box size="${len} ${wid} ${hei}"/>
+          </geometry>
+        </collision>
+        <inertial>
+          <mass value="100" />
+          <origin rpy="0 0 0" xyz="0 0 0" />
+          <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1" />
+        </inertial>
+      </link>
+      <gazebo reference="table">
+        <kp>1000000.0</kp>
+        <kd>1.0</kd>
+        <mu1>0.8</mu1>
+        <mu2>0.8</mu2>
+        <maxVel>0.0</maxVel>
+        <minDepth>0.001</minDepth>
+      </gazebo>
+  </xacro:macro>
+</robot>
