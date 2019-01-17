@@ -1,0 +1,83 @@
+position_joint_trajectory_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - panda1_joint1
+    - panda1_joint2
+    - panda1_joint3
+    - panda1_joint4
+    - panda1_joint5
+    - panda1_joint6
+    - panda1_joint7
+  constraints:
+    goal_time: 0.5
+    panda1_joint1:
+      goal: 0.05
+    panda1_joint2:
+      goal: 0.05
+    panda1_joint3:
+      goal: 0.05
+    panda1_joint4:
+      goal: 0.05
+    panda1_joint5:
+      goal: 0.05
+    panda1_joint6:
+      goal: 0.05
+    panda1_joint7:
+      goal: 0.05
+
+velocity_jointgroup_controller:
+  type: velocity_controllers/JointGroupVelocityController
+  joints:
+    - panda1_joint1
+    - panda1_joint2
+    - panda1_joint3
+    - panda1_joint4
+    - panda1_joint5
+    - panda1_joint6
+    - panda1_joint7
+  constraints:
+    goal_time: 0.5
+    panda1_joint1:
+      goal: 0.05
+    panda1_joint2:
+      goal: 0.05
+    panda1_joint3:
+      goal: 0.05
+    panda1_joint4:
+      goal: 0.05
+    panda1_joint5:
+      goal: 0.05
+    panda1_joint6:
+      goal: 0.05
+    panda1_joint7:
+      goal: 0.05
+
+
+franka_state_controller:
+  type: franka_control/FrankaStateController
+  publish_rate: 30  # [Hz]
+  joint_names:
+    - panda1_joint1
+    - panda1_joint2
+    - panda1_joint3
+    - panda1_joint4
+    - panda1_joint5
+    - panda1_joint6
+    - panda1_joint7
+  arm_id: panda
+
+
+# The joint state controller handles publishing transforms for any moving joints
+franka_sim_state_controller:
+  type: "joint_state_controller/JointStateController"
+  publish_rate: 50
+
+franka_left_finger_controller:
+  type: effort_controllers/JointPositionController
+  joint: panda1_finger_joint1
+  pid: {p: 1000.0, i: 5.0, d: 100.0, i_clamp_min: -10.0, i_clamp_max: 10.0, antiwindup: true}
+
+franka_right_finger_controller:
+  type: effort_controllers/JointPositionController
+  joint: panda1_finger_joint2
+  pid: {p: 1000.0, i: 5.0, d: 100.0, i_clamp_min: -10.0, i_clamp_max: 10.0, antiwindup: true}

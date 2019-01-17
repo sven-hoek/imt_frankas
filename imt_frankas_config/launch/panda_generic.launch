@@ -1,0 +1,108 @@
+<?xml version="1.0" ?>
+<!-- This is a highly configurable launch file and is best to be used inside of other launchfiles.
+  It provides the possiblity to run a Panda either in simulation or controlling the real robot. -->
+<launch>
+  <!-- This is the main flag whether the real robot or the simulated one should be used -->
+  <arg name="simulated" default="true" />
+  <!-- This argument is to prevent from starting gazebo twice when using more than one !simulated! robot -->
+  <arg name="launch_gazebo" default="true" />
+  <arg name="robot_name" default="panda1" />
+  <arg name="robot_ip" default="172.16.0.2" />
+  <arg name="load_gripper" default="true" />
+  <!-- Similarly to launch_gazebo, with this arg we prevent adding another table to the robot_description when
+  running more than two robots (note that this needs to be set to 'false' whenever starting a second Panda, no
+  matter if any of the robots is a simulated or a real one.
+  This is not a nice workaround but this way the table is present in Gazebo as well as in RViz. -->
+  <arg name="load_table" default="true" />
+  <!-- By setting this to 'true', either the position_joint_trajectory or the velocity_jointgroup controller,
+  depending on the arg 'hw_interface' will be started by this launchfile -->
+  <arg name="spawn_controller" default="false" />
+  <!-- Sets the hardware interface in robot description (set to VelocityJointInterface for velocity control) -->
+  <arg name="hw_interface" default="PositionJointInterface" />
+  <!-- The pose information to spawn the robot -->
+  <arg name="xyz" default="0.37 0.265 0.8" />
+  <arg name="rpy" default="0 0 0" />
+
+  <!-- arguments for gazebo -->
+  <arg name="start_paused" default="true"/>
+  <!-- By using this arg, gazebo can stay paused until the lasts robot was spawned (to ensure somewhat correct start position) -->
+  <arg name="unpause" default="true"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+  <arg name="gazebo_world" default="$(find franka_gazebo)/launch/franka.world"/>
+  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched.
+  Gazebo will only be launched, when both 'simulated' and 'launch_gazebo' are true.-->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch" if="$(eval simulated and launch_gazebo)" >
+    <arg name="world_name" value="$(arg gazebo_world)" />
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg start_paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+  <group ns="$(arg robot_name)">
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find imt_frankas_config)/robots/panda_arm_hand_table.urdf.xacro' connected_to:='world' hw_interface:='$(arg hw_interface)' xyz:='$(arg xyz)' rpy:='$(arg rpy)' load_table:='$(arg load_table)' namespace:='$(arg robot_name)'" if="$(arg load_gripper)" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find imt_frankas_config)/robots/panda_arm_table.urdf.xacro' connected_to:='world' hw_interface:='$(arg hw_interface)' xyz:='$(arg xyz)' rpy:='$(arg rpy)' load_table:='$(arg load_table)' namespace:='$(arg robot_name)'" unless="$(arg load_gripper)" />
+    <param name="robot_name" value="$(arg robot_name)" />
+
+    <rosparam command="load" file="$(find imt_frankas_config)/config/$(arg robot_name)_controllers.yaml" />
+
+    <group unless="$(arg simulated)">
+      <include file="$(find franka_gripper)/launch/franka_gripper.launch" if="$(arg load_gripper)">
+        <arg name="robot_ip" value="$(arg robot_ip)" />
+      </include>
+
+      <node name="franka_control" pkg="franka_control" type="franka_control_node" output="screen" required="true">
+        <rosparam command="load" file="$(find franka_control)/config/franka_control_node.yaml" />
+        <param name="robot_ip" value="$(arg robot_ip)" />
+      </node>
+
+      <node name="state_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="franka_state_controller"/>
+      <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen"/>
+      <node name="joint_state_publisher" type="joint_state_publisher" pkg="joint_state_publisher" output="screen">
+        <rosparam if="$(arg load_gripper)" param="source_list">[franka_state_controller/joint_states, franka_gripper/joint_states] </rosparam>
+        <rosparam unless="$(arg load_gripper)" param="source_list">[franka_state_controller/joint_states] </rosparam>
+        <param name="rate" value="30"/>
+      </node>
+      <node name="joint_state_desired_publisher" type="joint_state_publisher" pkg="joint_state_publisher" output="screen">
+        <rosparam if="$(arg load_gripper)" param="source_list">[franka_state_controller/joint_states_desired, franka_gripper/joint_states] </rosparam>
+        <rosparam unless="$(arg load_gripper)" param="source_list">[franka_state_controller/joint_states_desired] </rosparam>
+        <param name="rate" value="30"/>
+        <remap from="/joint_states" to="/joint_states_desired" />
+      </node>
+    </group>
+
+    <group if="$(arg simulated)">
+      <!-- push robot_description to factory and spawn robot in gazebo -->
+      <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" if="$(arg simulated)"
+            args="-urdf -model $(arg robot_name) -param robot_description
+            -J $(arg robot_name)_joint1 0.0
+            -J $(arg robot_name)_joint2 0.0
+            -J $(arg robot_name)_joint3 0.0
+            -J $(arg robot_name)_joint4 -1.54
+            -J $(arg robot_name)_joint5 0.0
+            -J $(arg robot_name)_joint6 1.83
+            -J $(arg robot_name)_joint7 0.0
+            -J $(arg robot_name)_finger_joint1 0.04
+            -J $(arg robot_name)_finger_joint2 0.04"
+            respawn="false" output="screen" />
+
+      <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher">
+        <param name="publish_frequency" type="double" value="30.0" />
+      </node>
+
+      <node name="sim_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="franka_sim_state_controller franka_left_finger_controller franka_right_finger_controller" if="$(arg load_gripper)"/>
+      <node name="sim_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="franka_sim_state_controller" unless="$(arg load_gripper)"/>
+      <!-- Start script that provides the action interface needed by moveIt to control the gripper -->
+      <node name="franka_gripper" pkg="franka_gazebo" type="gripper_action_server.py" respawn="false" output="screen" args="" if="$(arg load_gripper)"/>
+      <node name="joint_state_desired_publisher" pkg="topic_tools" type="relay" args="joint_states joint_states_desired" />
+      <node name="unpause_gazebo" pkg="rosservice" type="rosservice" args="call /gazebo/unpause_physics" if="$(arg unpause)" />
+    </group>
+
+    <node name="motion_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="position_joint_trajectory_controller" if="$(eval spawn_controller and hw_interface=='PositionJointInterface')"/>
+    <node name="motion_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="velocity_jointgroup_controller" if="$(eval spawn_controller and hw_interface=='VelocityJointInterface')"/>
+  </group>
+</launch>

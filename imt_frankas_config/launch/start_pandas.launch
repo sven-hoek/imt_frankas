@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<!-- This is the launch file to (somewhat) comfortably start either one or both of the robots, optionally in a simulation. -->
+<launch>
+  <arg name="start_panda1" default="true" />
+  <arg name="start_panda2" default="true" />
+  <arg name="simulate_panda1" default="true" />
+  <arg name="simulate_panda2" default="true" />
+  <arg name="panda1_ip" default="172.16.0.2" />
+  <arg name="panda2_ip" default="172.16.0.4" />
+  <arg name="load_gripper1" default="true" />
+  <arg name="load_gripper2" default="true" />
+
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gazebo_world" default="$(find franka_gazebo)/launch/franka.world"/>
+
+  <include file="$(find imt_frankas_config)/launch/panda_generic.launch" if="$(arg start_panda1)">
+    <arg name="simulated" value="$(arg simulate_panda1)" />
+    <arg name="launch_gazebo" value="true" />
+    <arg name="robot_name" value="panda1" />
+    <arg name="robot_ip" value="$(arg panda1_ip)" />
+    <arg name="load_gripper" value="$(arg load_gripper1)" />
+    <arg name="load_table" value="true" />
+    <arg name="spawn_controller" value="true" />
+    <arg name="hw_interface" value="PositionJointInterface" />
+    <arg name="xyz" value="0.37 0.265 0.8" />
+    <arg name="rpy" value="0 0 0" />
+    <arg name="unpause" value="false"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="gazebo_world" value="$(arg gazebo_world)"/>
+  </include>
+
+  <include file="$(find imt_frankas_config)/launch/panda_generic.launch" if="$(arg start_panda2)">
+    <arg name="simulated" value="$(arg simulate_panda2)" />
+    <arg name="launch_gazebo" value="$(eval (not start_panda1) or (not simulate_panda1))" />
+    <arg name="robot_name" value="panda2" />
+    <arg name="robot_ip" value="$(arg panda2_ip)" />
+    <arg name="load_gripper" value="$(arg load_gripper2)" />
+    <arg name="load_table" value="$(eval not start_panda1)" />
+    <arg name="spawn_controller" value="true" />
+    <arg name="hw_interface" value="PositionJointInterface" />
+    <arg name="xyz" value="1.5 0.4 0.8" />
+    <arg name="rpy" value="0 0 0" />
+    <arg name="unpause" value="false"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="gazebo_world" value="$(arg gazebo_world)"/>
+  </include>
+
+  <node name="unpause_gazebo" pkg="rosservice" type="rosservice" args="call /gazebo/unpause_physics" respawn="true" respawn_delay="5" />
+</launch>

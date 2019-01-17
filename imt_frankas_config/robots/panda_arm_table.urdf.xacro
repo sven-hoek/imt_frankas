@@ -3,7 +3,7 @@
   <xacro:arg name="hw_interface" default="PositionJointInterface"/>
   <xacro:arg name="xyz" default="0 0 0"/>
   <xacro:arg name="rpy" default="0 0 0"/>
-  <xacro:arg name="namespace" default="/"/>
+  <xacro:arg name="namespace" default="panda1"/>
   <xacro:arg name="load_table" default="true" />
   <xacro:include filename="$(find franka_description)/robots/panda_arm.xacro" />
   <xacro:include filename="$(find imt_frankas_config)/robots/table.xacro" />
