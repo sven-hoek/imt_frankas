@@ -56,7 +56,7 @@
       </include>
 
       <node name="franka_control" pkg="franka_control" type="franka_control_node" output="screen" required="true">
-        <rosparam command="load" file="$(find franka_control)/config/franka_control_node.yaml" />
+        <rosparam command="load" file="$(find imt_frankas_config)/config/$(arg robot_name)_control_node.yaml" />
         <param name="robot_ip" value="$(arg robot_ip)" />
       </node>
 
@@ -104,5 +104,7 @@
 
     <node name="motion_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="position_joint_trajectory_controller" if="$(eval spawn_controller and hw_interface=='PositionJointInterface')"/>
     <node name="motion_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="velocity_jointgroup_controller" if="$(eval spawn_controller and hw_interface=='VelocityJointInterface')"/>
+
+    <node name="dingsi" pkg="rqt_joint_trajectory_controller" type="rqt_joint_trajectory_controller" respawn="false" output="screen" />
   </group>
 </launch>

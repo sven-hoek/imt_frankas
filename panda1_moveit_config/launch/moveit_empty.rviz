@@ -48,7 +48,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: panda_link0
+    Fixed Frame: world
     Frame Rate: 30
   Name: root
   Tools:
@@ -77,7 +77,7 @@ Visualization Manager:
       Name: Current View
       Near Clip Distance: 0.00999999978
       Pitch: 0.369797021
-      Target Frame: panda_link0
+      Target Frame: world
       Value: XYOrbit (rviz)
       Yaw: 0.246767148
     Saved: ~

@@ -64,7 +64,7 @@ franka_state_controller:
     - panda1_joint5
     - panda1_joint6
     - panda1_joint7
-  arm_id: panda
+  arm_id: panda1
 
 
 # The joint state controller handles publishing transforms for any moving joints

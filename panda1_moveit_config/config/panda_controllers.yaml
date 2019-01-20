@@ -4,10 +4,10 @@
     type: FollowJointTrajectory
     default: true
     joints:
-      - panda_joint1
-      - panda_joint2
-      - panda_joint3
-      - panda_joint4
-      - panda_joint5
-      - panda_joint6
-      - panda_joint7
+      - panda1_joint1
+      - panda1_joint2
+      - panda1_joint3
+      - panda1_joint4
+      - panda1_joint5
+      - panda1_joint6
+      - panda1_joint7
