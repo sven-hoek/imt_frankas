@@ -33,14 +33,13 @@
             <arg name="load_gripper" value="$(arg load_gripper1)" />
         </include>
 
-        <include file="$(find panda1_moveit_config)/launch/moveit_rviz.launch" if="$(arg launch_rviz)" />
     </group>
 
     <group ns="panda2" if="$(arg start_panda2)">
         <include file="$(find panda2_moveit_config)/launch/panda_moveit.launch">
             <arg name="load_gripper" value="$(arg load_gripper2)" />
         </include>
-
-        <include file="$(find panda2_moveit_config)/launch/moveit_rviz.launch" if="$(arg launch_rviz)" />
     </group>
+
+    <include file="$(find panda2_moveit_config)/launch/moveit_rviz.launch" if="$(arg launch_rviz)" />
 </launch>
