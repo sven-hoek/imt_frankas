@@ -22,6 +22,16 @@
   <!-- The pose information to spawn the robot -->
   <arg name="xyz" default="0.37 0.265 0.8" />
   <arg name="rpy" default="0 0 0" />
+  <!-- Setting the initial configuration of the robot joint position -->
+  <arg name="init_joint1" default="0.0" />
+  <arg name="init_joint2" default="0.0" />
+  <arg name="init_joint3" default="0.0" />
+  <arg name="init_joint4" default="-1.54" />
+  <arg name="init_joint5" default="0.0" />
+  <arg name="init_joint6" default="0.0" />
+  <arg name="init_joint7" default="1.83" />
+  <arg name="init_fingerjoint1" default="0.04" />
+  <arg name="init_fingerjoint2" default="0.04" />
 
   <!-- arguments for gazebo -->
   <arg name="start_paused" default="true"/>
@@ -79,15 +89,15 @@
       <!-- push robot_description to factory and spawn robot in gazebo -->
       <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" if="$(arg simulated)"
             args="-urdf -model $(arg robot_name) -param robot_description
-            -J $(arg robot_name)_joint1 0.0
-            -J $(arg robot_name)_joint2 0.0
-            -J $(arg robot_name)_joint3 0.0
-            -J $(arg robot_name)_joint4 -1.54
-            -J $(arg robot_name)_joint5 0.0
-            -J $(arg robot_name)_joint6 1.83
-            -J $(arg robot_name)_joint7 0.0
-            -J $(arg robot_name)_finger_joint1 0.04
-            -J $(arg robot_name)_finger_joint2 0.04"
+            -J $(arg robot_name)_joint1 $(arg init_joint1)
+            -J $(arg robot_name)_joint2 $(arg init_joint2)
+            -J $(arg robot_name)_joint3 $(arg init_joint3)
+            -J $(arg robot_name)_joint4 $(arg init_joint4)
+            -J $(arg robot_name)_joint5 $(arg init_joint5)
+            -J $(arg robot_name)_joint6 $(arg init_joint6)
+            -J $(arg robot_name)_joint7 $(arg init_joint7)
+            -J $(arg robot_name)_finger_joint1 $(arg init_fingerjoint1)
+            -J $(arg robot_name)_finger_joint2 $(arg init_fingerjoint2)"
             respawn="false" output="screen" />
 
       <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher">

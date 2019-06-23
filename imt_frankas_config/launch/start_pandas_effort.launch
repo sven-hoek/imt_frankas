@@ -29,6 +29,13 @@
     <arg name="unpause" value="false"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="gazebo_world" value="$(arg gazebo_world)"/>
+    <arg name="init_joint1" value="0.0" />
+    <arg name="init_joint2" value="0.0" />
+    <arg name="init_joint3" value="0.0" />
+    <arg name="init_joint4" value="0.0" />
+    <arg name="init_joint5" value="0.0" />
+    <arg name="init_joint6" value="0.0" />
+    <arg name="init_joint7" value="0.0" />
   </include>
 
   <include file="$(find imt_frankas_config)/launch/panda_generic.launch" if="$(arg start_panda2)">
@@ -45,6 +52,13 @@
     <arg name="unpause" value="false"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="gazebo_world" value="$(arg gazebo_world)"/>
+    <arg name="init_joint1" value="0.0" />
+    <arg name="init_joint2" value="0.0" />
+    <arg name="init_joint3" value="0.0" />
+    <arg name="init_joint4" value="0.0" />
+    <arg name="init_joint5" value="0.0" />
+    <arg name="init_joint6" value="0.0" />
+    <arg name="init_joint7" value="0.0" />
   </include>
 
   <node name="unpause_gazebo" pkg="rosservice" type="rosservice" args="call /gazebo/unpause_physics" respawn="true" respawn_delay="5" if="$(eval simulate_panda1 or simulate_panda2)"/>
