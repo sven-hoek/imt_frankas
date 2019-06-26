@@ -8,7 +8,7 @@
   <arg name="launch_gazebo" default="true" />
   <arg name="robot_name" default="panda1" />
   <arg name="robot_ip" default="172.16.0.2" />
-  <arg name="load_gripper" default="true" />
+  <arg name="load_gripper" default="false" />
   <!-- Similarly to launch_gazebo, with this arg we prevent adding another table to the robot_description when
   running more than two robots (note that this needs to be set to 'false' whenever starting a second Panda, no
   matter if any of the robots is a simulated or a real one.
@@ -16,9 +16,9 @@
   <arg name="load_table" default="true" />
   <!-- By setting this to 'true', either the position_joint_trajectory or the velocity_jointgroup controller,
   depending on the arg 'hw_interface' will be started by this launchfile -->
-  <arg name="spawn_controller" default="false" />
+  <arg name="spawn_controller" default="true" />
   <!-- Sets the hardware interface in robot description (set to VelocityJointInterface for velocity control) -->
-  <arg name="hw_interface" default="PositionJointInterface" />
+  <arg name="hw_interface" default="EffortJointInterface" />
   <!-- When using the EffortJointInterface, this  arg decides, if the position or the effort controller will be started -->
   <arg name="effort_position_controller" default="false" />
   <!-- The pose information to spawn the robot -->
@@ -28,10 +28,10 @@
   <arg name="init_joint1" default="0.0" />
   <arg name="init_joint2" default="0.0" />
   <arg name="init_joint3" default="0.0" />
-  <arg name="init_joint4" default="-1.54" />
+  <arg name="init_joint4" default="0.0" />
   <arg name="init_joint5" default="0.0" />
   <arg name="init_joint6" default="0.0" />
-  <arg name="init_joint7" default="1.83" />
+  <arg name="init_joint7" default="0.0" />
   <arg name="init_fingerjoint1" default="0.04" />
   <arg name="init_fingerjoint2" default="0.04" />
 
@@ -56,11 +56,11 @@
   </include>
 
   <group ns="$(arg robot_name)">
-    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find imt_frankas_config)/robots/panda_arm_hand_table.urdf.xacro' connected_to:='world' hw_interface:='$(arg hw_interface)' xyz:='$(arg xyz)' rpy:='$(arg rpy)' load_table:='$(arg load_table)' namespace:='$(arg robot_name)'" if="$(arg load_gripper)" />
-    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find imt_frankas_config)/robots/panda_arm_table.urdf.xacro' connected_to:='world' hw_interface:='$(arg hw_interface)' xyz:='$(arg xyz)' rpy:='$(arg rpy)' load_table:='$(arg load_table)' namespace:='$(arg robot_name)'" unless="$(arg load_gripper)" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find imt_frankas_config)/robots/panda_arm_4j_hand_table.urdf.xacro' connected_to:='world' hw_interface:='$(arg hw_interface)' xyz:='$(arg xyz)' rpy:='$(arg rpy)' load_table:='$(arg load_table)' namespace:='$(arg robot_name)'" if="$(arg load_gripper)" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find imt_frankas_config)/robots/panda_arm_4j_table.urdf.xacro' connected_to:='world' hw_interface:='$(arg hw_interface)' xyz:='$(arg xyz)' rpy:='$(arg rpy)' load_table:='$(arg load_table)' namespace:='$(arg robot_name)'" unless="$(arg load_gripper)" />
     <param name="robot_name" value="$(arg robot_name)" />
 
-    <rosparam command="load" file="$(find imt_frankas_config)/config/$(arg robot_name)_controllers.yaml" />
+    <rosparam command="load" file="$(find imt_frankas_config)/config/$(arg robot_name)_4j_controllers.yaml" />
 
     <group unless="$(arg simulated)">
       <include file="$(find franka_gripper)/launch/franka_gripper.launch" if="$(arg load_gripper)">
@@ -68,7 +68,7 @@
       </include>
 
       <node name="franka_control" pkg="franka_control" type="franka_control_node" output="screen" required="true">
-        <rosparam command="load" file="$(find imt_frankas_config)/config/$(arg robot_name)_control_node.yaml" />
+        <rosparam command="load" file="$(find imt_frankas_config)/config/$(arg robot_name)_4j_control_node.yaml" />
         <param name="robot_ip" value="$(arg robot_ip)" />
       </node>
 
