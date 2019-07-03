@@ -55,6 +55,8 @@
     <arg name="headless" value="$(arg headless)"/>
   </include>
 
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find imt_frankas_config)/robots/panda_arm_4j_table.urdf.xacro' connected_to:='world' hw_interface:='$(arg hw_interface)' xyz:='$(arg xyz)' rpy:='$(arg rpy)' load_table:='$(arg load_table)' namespace:='$(arg robot_name)'" unless="$(arg load_gripper)" />
+
   <group ns="$(arg robot_name)">
     <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find imt_frankas_config)/robots/panda_arm_4j_hand_table.urdf.xacro' connected_to:='world' hw_interface:='$(arg hw_interface)' xyz:='$(arg xyz)' rpy:='$(arg rpy)' load_table:='$(arg load_table)' namespace:='$(arg robot_name)'" if="$(arg load_gripper)" />
     <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find imt_frankas_config)/robots/panda_arm_4j_table.urdf.xacro' connected_to:='world' hw_interface:='$(arg hw_interface)' xyz:='$(arg xyz)' rpy:='$(arg rpy)' load_table:='$(arg load_table)' namespace:='$(arg robot_name)'" unless="$(arg load_gripper)" />

@@ -23,7 +23,7 @@
     <arg name="robot_name" value="panda1" />
     <arg name="robot_ip" value="$(arg panda1_ip)" />
     <arg name="load_gripper" value="$(arg load_gripper1)" />
-    <arg name="load_table" value="true" />
+    <arg name="load_table" value="false" />
     <arg name="effort_position_controller" value="$(arg effort_position_controller1)" />
     <arg name="spawn_controller" value="$(arg spawn_controller1)" />
     <arg name="hw_interface" value="EffortJointInterface" />
