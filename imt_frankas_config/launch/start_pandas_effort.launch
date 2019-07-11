@@ -13,6 +13,7 @@
   <arg name="effort_position_controller2" default="false" />
   <arg name="spawn_controller1" default="true" />
   <arg name="spawn_controller2" default="true" />
+  <arg name="gui" default="true" />
 
   <arg name="use_sim_time" default="true"/>
   <arg name="gazebo_world" default="$(find franka_gazebo)/launch/franka.world"/>
@@ -32,6 +33,7 @@
     <arg name="unpause" value="false"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="gazebo_world" value="$(arg gazebo_world)"/>
+    <arg name="gui" value="$(arg gui)" />
     <arg name="init_joint1" value="0.0" />
     <arg name="init_joint2" value="0.0" />
     <arg name="init_joint3" value="0.0" />
@@ -56,6 +58,7 @@
     <arg name="unpause" value="false"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="gazebo_world" value="$(arg gazebo_world)"/>
+    <arg name="gui" value="$(arg gui)" />
     <arg name="init_joint1" value="0.0" />
     <arg name="init_joint2" value="0.0" />
     <arg name="init_joint3" value="0.0" />

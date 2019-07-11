@@ -11,6 +11,7 @@
   <arg name="load_gripper2" default="true" />
   <arg name="spawn_controller1" default="true" />
   <arg name="spawn_controller2" default="true" />
+  <arg name="gui" default="true" />
 
   <arg name="use_sim_time" default="true"/>
   <arg name="gazebo_world" default="$(find franka_gazebo)/launch/franka.world"/>
@@ -29,6 +30,7 @@
     <arg name="unpause" value="false"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="gazebo_world" value="$(arg gazebo_world)"/>
+    <arg name="gui" value="$(arg gui)" />
   </include>
 
   <include file="$(find imt_frankas_config)/launch/panda_generic.launch" if="$(arg start_panda2)">
@@ -45,6 +47,7 @@
     <arg name="unpause" value="false"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="gazebo_world" value="$(arg gazebo_world)"/>
+    <arg name="gui" value="$(arg gui)" />
   </include>
 
   <!-- node name="unpause_gazebo" pkg="rosservice" type="rosservice" args="call /gazebo/unpause_physics" respawn="true" respawn_delay="5" if="$(eval simulate_panda1 or simulate_panda2)"/-->
