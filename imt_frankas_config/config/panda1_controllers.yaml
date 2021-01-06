@@ -35,22 +35,22 @@ velocity_jointgroup_controller:
     - panda1_joint5
     - panda1_joint6
     - panda1_joint7
+  panda1_joint1:
+    pid: {p: 100.0, i: 0.01, d: 10.0, i_clamp_min: -0.5, i_clamp_max: 0.5, antiwindup: true}
+  panda1_joint2:
+    pid: {p: 100.0, i: 0.01, d: 10.0, i_clamp_min: -0.5, i_clamp_max: 0.5, antiwindup: true}
+  panda1_joint3:
+    pid: {p: 100.0, i: 0.01, d: 10.0, i_clamp_min: -0.5, i_clamp_max: 0.5, antiwindup: true}
+  panda1_joint4:
+    pid: {p: 100.0, i: 0.01, d: 10.0, i_clamp_min: -0.5, i_clamp_max: 0.5, antiwindup: true}
+  panda1_joint5:
+    pid: {p: 100.0, i: 0.01, d: 10.0, i_clamp_min: -0.5, i_clamp_max: 0.5, antiwindup: true}
+  panda1_joint6:
+    pid: {p: 100.0, i: 0.01, d: 10.0, i_clamp_min: -0.5, i_clamp_max: 0.5, antiwindup: true}
+  panda1_joint7:
+    pid: {p: 100.0, i: 0.01, d: 10.0, i_clamp_min: -0.5, i_clamp_max: 0.5, antiwindup: true}
   constraints:
     goal_time: 0.5
-    panda1_joint1:
-      goal: 0.05
-    panda1_joint2:
-      goal: 0.05
-    panda1_joint3:
-      goal: 0.05
-    panda1_joint4:
-      goal: 0.05
-    panda1_joint5:
-      goal: 0.05
-    panda1_joint6:
-      goal: 0.05
-    panda1_joint7:
-      goal: 0.05
 
 effort_jointgroup_controller:
   type: effort_controllers/JointGroupEffortController
@@ -103,6 +103,15 @@ effort_position_jointgroup_controller:
     pid: {p: 13.0, i: 6.0, d: 1.0, i_clamp_min: -1.0, i_clamp_max: 1.0, antiwindup: true}
   panda1_joint7:
     pid: {p: 0.8, i: 0.0, d: 0.0, i_clamp_min: -0.1, i_clamp_max: 0.1, antiwindup: true}
+
+gazebo_ros_control/pid_gains:
+  panda1_joint1: {p: 100.0, i: 0.1, d: 1.01}
+  panda1_joint2: {p: 100.0, i: 0.1, d: 1.01}
+  panda1_joint3: {p: 100.0, i: 0.1, d: 1.01}
+  panda1_joint4: {p: 100.0, i: 0.1, d: 1.01}
+  panda1_joint5: {p: 100.0, i: 0.1, d: 1.01}
+  panda1_joint6: {p: 100.0, i: 0.1, d: 1.01}
+  panda1_joint7: {p: 100.0, i: 0.1, d: 1.01}
 
 
 franka_state_controller:
